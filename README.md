@@ -28,6 +28,8 @@ After starting the VM you can log on using `ssh -p 4242 level0@127.0.0.1` and us
 ## Sources
 
 [Stack memory introduction article](https://beta.hackndo.com/stack-introduction/) (in french).
+[Endianness wikipedia page](https://en.wikipedia.org/wiki/Endianness).
+[An infographic](https://github.com/croueAlec/ft_ssl/blob/main/Documentation/endianness.png) to better understand endianness (made by yours truly).
 
 ## Tools
 
