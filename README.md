@@ -59,3 +59,11 @@ The workflow will be as follows :
 - With these functions now found, we can try to find known attack vectors to exploit using the `man` command.
 - Then we can inspect the code using `objdump` to find a way to use this attack vector.
 - Finally we can use the different tools mentionned above to apply this exploit.
+
+We also have access to **Ghidra** to decompile binaries. To extract binaries from the vm, use
+```sh
+./tools/extract_binary.sh USER
+```
+
+Binaries can then be decompiled by loading them in **Ghidra** then analysing them.
+The `main` function can be found using the `symbol tree` under `m`.
