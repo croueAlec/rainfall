@@ -4,7 +4,7 @@ This level is an introduction to reverse engineering and does not require the us
 
 When we try to run level0, we are greeted with a segfault, whereas when we use an argument it prints "No !" on the terminal. Let's use `gdb` and `disass main` to see what happens inside.
 
-```
+```assembly
 Dump of assembler code for function main:
    0x08048ec0 <+0>:	push   %ebp
    0x08048ec1 <+1>:	mov    %esp,%ebp
@@ -65,9 +65,58 @@ So basically we have a few function calls :
 - *execv*, executes a command passed as argument.
 - *fwrite*, writes from a source to a file descriptor using a specific byte size.
 
-So we call *atoi* on presumably a string, then we compare the output of *atoi* to a hex value *0x1a7*.
+So we call *atoi* on the second argument of *\*argv[]* with instructions `<main+12>` to `<main+20>`
+Then we compare the output of *atoi* to a hex value *0x1a7* with instruction `<main+25>`.
+
 If the output and value are not equal, `jne` jumps to instruction `<main+152>`. This then calls the *fwrite* function and leaves. This is probably the "No !" we saw earlier, and as such is not the outcome we are looking for.
 
 If *atoi*'s output and *0x1a7* are equal we eventually reach the *execv* function, this might be useful in order to exploit a **privilege escalation attack**.
 Before then, we go through a few steps. The result of *strdup* using `0x80c5348` is stored in `0x8050bf0`.
+So, we know that the variable at `0x80c5348` should be a string.
 
+Then the program messes with the permissions using the `*gid` and `*uid` functions.
+
+And finally `execv` is called with two parameters.
+The previously allocated string is loaded into `%eax` with instruction `<main+130>`, then `%eax` is loaded as a second argument with instruction `<main+134>`.
+
+Finally our raw string is loaded as a first argument `<main+138>` and finally `execv` is called with the same two arguments as parameters.
+
+Now that we have a rough idea of the program, let's see what is behind those variables.
+
+Tet's do `gdb > p 0x1a7` this prints the number *423*.
+Then we can do `gdb > p 0x80c5348` this gives us the number *135025480*, but remember that this is a string, let us cast it as such. Thus `gdb > p 0x80c5348` prints `"/bin/sh"`.
+
+So basically if we put use `./level0 423`, the program will the change it's privileges and call `execv("/bin/sh", "/bin/sh");`.
+
+Let's do this then.
+
+```sh
+./level 423
+```
+
+> $
+
+Well, we now have a shell! But wait, who are we?
+
+>$ whoami
+
+>level1
+
+We succeded!
+
+Now we can just cat the password using
+```sh
+cat /home/user/level1/.pass
+```
+>1fe8a524fa4bec01ca4ea2a869af2a02260d4a7d5fe7e7c24d8617e6dca12d3a
+
+And we have our flag!
+
+we can now switch to **level1**.
+
+```sh
+su level1
+1fe8a524fa4bec01ca4ea2a869af2a02260d4a7d5fe7e7c24d8617e6dca12d3a
+```
+
+This level was mainly about getting aquainted with the rainfall VM, assembly, the basic commands, and ghidra. We will go more in depth in the coming levels.
