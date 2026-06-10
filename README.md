@@ -2,7 +2,12 @@
 
 To setup rainfall, you have to download the ISO from the intra's subject page. Then create a virtual machine using your prefered software (in my case Virtual Box).
 
-Before starting the virtual machine you should add a port forwarding rule under `Settings > Network > Adapter 1`, set `Attached to` to `NAT` and create a `Port Forwarding` rule with both the `Host Port` and `Guest Port` set to **4242**.
+To create the VM, you can do this manually or just use 
+```sh
+./tools/setup_rainfall_vm.sh [iso path]
+```
+
+Or create the VM manually and add a port forwarding rule under `Settings > Network > Adapter 1`, set `Attached to` to `NAT` and create a `Port Forwarding` rule with both the `Host Port` and `Guest Port` set to **4242**.
 
 After starting the VM you can log on using `ssh -p 4242 level0@127.0.0.1` and using the password `level0`. Then you're good to go.
 
