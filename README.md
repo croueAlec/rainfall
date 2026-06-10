@@ -11,6 +11,13 @@ Or create the VM manually and add a port forwarding rule under `Settings > Netwo
 
 After starting the VM you can log on using `ssh -p 4242 level0@127.0.0.1` and using the password `level0`. Then you're good to go.
 
+You can log in as a specific user (level[0-9] or bonus[0-3]) using the following command
+```sh
+./tools/open_level.sh [user]
+```
+
+If the flag has not been found, it will not be printed.
+
  ## Introduction
  This is a project about binary exploitation, in particular **Buffer Overflow** attacks. 
  This introduction will serve as a well an *introduction* on a few concepts required to properly understand what a **buffer overflow** is and how we will exploit them.
