@@ -1,8 +1,8 @@
 #! /bin/bash
 
 function print_connection() {
-	echo -n "Connecting to VM as "
-	print_bold "$1"
+	bold_value="\033[1m$1\033[0m"
+	echo -e "Extracting ./$bold_value from user $bold_value"
 	echo -n "Password is : "
 }
 
