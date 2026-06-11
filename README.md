@@ -38,6 +38,8 @@ If the flag has not been found, it will not be printed.
 [Endianness wikipedia page](https://en.wikipedia.org/wiki/Endianness).
 [An infographic](https://github.com/croueAlec/ft_ssl/blob/main/Documentation/endianness.png) to better understand endianness (made by yours truly).
 
+[Shellcode wikipedia page](https://en.wikipedia.org/wiki/Shellcode).
+
 ## Tools
 
 [Dogbolt](https://dogbolt.org/) an online Binary decompiler.
@@ -45,6 +47,8 @@ If the flag has not been found, it will not be printed.
 [CodeConvert](https://www.codeconvert.ai/assembly-to-c-converter) an online **AI** assembly to C translator.
 
 [Wiremask's buffer overflow finder](https://wiremask.eu/tools/buffer-overflow-pattern-generator/) this tool creates a pattern to be used as a basic overflow input to show where the return adress can be overwritten.
+
+Shell-storm.org **was** the default shellcode repository, unfortunately it is now down. You know what is not ? The **Internet Archive**. Anyway, here's the [Shell-storm internet archive](https://web.archive.org/web/20260201043200/http://shell-storm.org/shellcode/files/shellcode-827.html) link.
 
 ## Methodology
 
