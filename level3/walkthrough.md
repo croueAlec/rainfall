@@ -105,6 +105,7 @@ su level4
 b209ea91ad69ef36f2cf0fcbbc24c739fd10464cf545b20bea8572ebdc3c36fa
 ```
 
+This exploit was quite ouroboric in nature. It took me a while to understand the concept of targeting the buffer itself to use as a write destination.
 
 Note :
 ```
