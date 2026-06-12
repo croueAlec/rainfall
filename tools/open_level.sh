@@ -1,16 +1,13 @@
 #! /bin/bash
 
+PASS_PATH=""
+HOSTNAME="127.0.0.1"
+
 function print_connection() {
-	bold_value="\033[1m$1\033[0m"
-	echo -e "Extracting ./$bold_value from user $bold_value"
-	echo -n "Password is : "
+	echo -e "Logging in to \033[1mRainfall\033[0m user \033[1m$1\033[0m"
 }
 
-function print_bold() {
-	echo -e "\033[1m$1\033[0m"
-}
-
-function print_flag() {
+function set_pass_path() {
 	previous_user="$1"
 
 	if [ ! -s "./$previous_user/flag" ]; then
@@ -18,7 +15,7 @@ function print_flag() {
 		exit 1
 	fi
 	print_connection $VM_USER; 
-	print_bold $(cat ./$previous_user/flag)
+	PASS_PATH="./$previous_user/flag"
 }
 
 if [ -z "$1" ]; then
@@ -34,14 +31,14 @@ else
 		previous_user="${prefix}$((num - 1))"
 
 		case "$VM_USER" in
-		"level0") print_connection $VM_USER; print_bold "level0"
+		"level0") print_connection $VM_USER; PASS_PATH="./tools/.level0_flag"
 		;;
-		"bonus0") print_flag "level9"
+		"bonus0") set_pass_path "level9"
 		;;
-		*) print_flag "$previous_user"
+		*) set_pass_path "$previous_user"
 		esac
 
-		ssh -p 4242 $VM_USER@127.0.0.1
+		sshpass -f $PASS_PATH ssh -p 4242 $VM_USER@$HOSTNAME
 	else
 		echo "Error : Invalid user name"
 		exit 1
