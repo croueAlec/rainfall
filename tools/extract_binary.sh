@@ -5,7 +5,7 @@ HOSTNAME="127.0.0.1"
 
 function print_extraction() {
 	bold_value="\033[1m$1\033[0m"
-	echo -e "Extracting ./$bold_value from user $bold_value"
+	echo -e "Extracting ./$bold_value from user $bold_value to ./binaries/$bold_value"
 }
 
 function set_pass_path() {
