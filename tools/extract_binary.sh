@@ -1,16 +1,14 @@
 #! /bin/bash
 
+PASS_PATH=""
+HOSTNAME="127.0.0.1"
+
 function print_extraction() {
 	bold_value="\033[1m$1\033[0m"
 	echo -e "Extracting ./$bold_value from user $bold_value"
-	echo -n "Password is : "
 }
 
-function print_bold() {
-	echo -e "\033[1m$1\033[0m"
-}
-
-function print_flag() {
+function set_pass_path() {
 	previous_user="$1"
 
 	if [ ! -s "./$previous_user/flag" ]; then
@@ -18,7 +16,7 @@ function print_flag() {
 		exit 1
 	fi
 	print_extraction $VM_USER; 
-	print_bold $(cat ./$previous_user/flag)
+	PASS_PATH="./$previous_user/flag"
 }
 
 if [ -z "$1" ]; then
@@ -34,14 +32,15 @@ else
 		previous_user="${prefix}$((num - 1))"
 
 		case "$VM_USER" in
-		"level0") print_extraction $VM_USER; print_bold "level0"
+		"level0") print_extraction $VM_USER; PASS_PATH="./tools/.level0_flag"
 		;;
-		"bonus0") print_flag "level9"
+		"bonus0") set_pass_path "level9"
 		;;
-		*) print_flag "$previous_user"
+		*) set_pass_path "$previous_user"
 		esac
 
-		scp -P 4242 $VM_USER@localhost:/home/user/$VM_USER/$VM_USER ./binaries/. 2> /dev/null
+		sshpass -f $PASS_PATH scp -P 4242 $VM_USER@$HOSTNAME:/home/user/$VM_USER/$VM_USER ./binaries/. 2> /dev/null
+		echo "Extract done"
 	else
 		echo "Error : Invalid user name"
 		exit 1
