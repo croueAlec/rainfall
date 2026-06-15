@@ -2,6 +2,12 @@
 
 Would you like a [PLT](https://medium.com/swlh/binary-exploitation-attacking-dynamic-linking-57d00ae56a83)? 
 
+An example snippet from a random [github user](https://gist.github.com/shahrilnet/e73268d41d493e056a5d2d768e5c634a).
+
+A [tutorial](https://www.youtube.com/watch?v=t1LH9D5cuK4) with an *ok* explanation.
+
+---
+
 Nothing of note with `ll`.
 We will get back to the `checksec` output later.
 
