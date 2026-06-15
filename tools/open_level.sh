@@ -4,7 +4,18 @@ PASS_PATH=""
 HOSTNAME="127.0.0.1"
 
 function print_connection() {
-	echo -e "Logging in to \033[1mRainfall\033[0m user \033[1m$1\033[0m"
+	echo -e "Logging in to \033[1mRainfall\033[0m as user \033[1m$1\033[0m"
+}
+
+find_latest_level() {
+	for user in level0 level1 level2 level3 level4 level5 \
+				level6 level7 level8 level9 bonus0
+	do
+		if [ ! -s "./$user/flag" ]; then
+			VM_USER="$user"
+			return
+		fi
+	done
 }
 
 function set_pass_path() {
@@ -23,6 +34,11 @@ if [ -z "$1" ]; then
 	exit 1
 else
 	VM_USER="$1"
+
+	if [[ "$VM_USER" =~ ^(latest)$ ]]; then
+		find_latest_level
+	fi
+
 	if [[ "$VM_USER" =~ ^(level[0-9]|bonus[0-3])$ ]]; then
 
 		num=${VM_USER##*[!0-9]}
