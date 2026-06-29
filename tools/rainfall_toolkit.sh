@@ -26,13 +26,14 @@ function print_injection() {
 find_latest_level() {
 	for user in level0 level1 level2 level3 level4 level5 \
 				level6 level7 level8 level9 bonus0 bonus1 \
-				bonus2
+				bonus2 bonus3
 	do
 		if [ ! -s "./$user/flag" ]; then
 			VM_USER="$user"
 			vm_user_bold="\033[1m$VM_USER\033[0m"
 			return
 		fi
+		VM_USER="$user"
 	done
 }
 
@@ -87,7 +88,7 @@ function set_pass_path() {
 }
 
 
-if [ -z "$COMMAND" ]; then
+if [ -z "$COMMAND" ] || [ -z "$VM_USER" ]; then
 	echo "Error : Missing argument : Usage : ./rainfall_toolkit.sh <open|inject|extract> <target user> [file path]";
 	exit 1
 else
@@ -104,6 +105,8 @@ else
 
 		case "$VM_USER" in
 		"bonus0") set_pass_path "level9"
+		;;
+		"bonus3") set_pass_path "bonus3"; VM_USER="end"
 		;;
 		*) set_pass_path "$previous_user"
 		esac
