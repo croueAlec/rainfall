@@ -55,6 +55,7 @@ Shell-storm.org **was** the default shellcode repository, unfortunately it is no
 When we reach a new level, we will follow these basic steps and use the following commands.
 
 `checksec --file <bin>` can be used to see what vulnerabilities the binary has.
+You can find a more in-depth explanation [here](https://medium.com/@slimm609/checksec-d4131dff0fca).
 
 `ll` can be used to see the binary's permissions. Most of the time it will have the permissions of level*N+1*. Meaning any command we can use in it will be used as if we were level*N+1*.
 
