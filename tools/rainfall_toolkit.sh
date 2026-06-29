@@ -33,7 +33,7 @@ find_latest_level() {
 			vm_user_bold="\033[1m$VM_USER\033[0m"
 			return
 		fi
-		VM_USER="$user"
+		VM_USER="end"
 	done
 }
 
@@ -96,7 +96,7 @@ else
 		find_latest_level
 	fi
 
-	if [[ "$VM_USER" =~ ^(level[0-9]|bonus[0-3])$ ]]; then
+	if [[ "$VM_USER" =~ ^(level[0-9]|bonus[0-3]|end)$ ]]; then
 
 		num=${VM_USER##*[!0-9]}
 		prefix=${VM_USER%"$num"}
@@ -106,7 +106,7 @@ else
 		case "$VM_USER" in
 		"bonus0") set_pass_path "level9"
 		;;
-		"bonus3") set_pass_path "bonus3"; VM_USER="end"
+		"end") set_pass_path "bonus3"; VM_USER="end"
 		;;
 		*) set_pass_path "$previous_user"
 		esac
