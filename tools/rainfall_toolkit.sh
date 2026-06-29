@@ -26,7 +26,7 @@ function print_injection() {
 find_latest_level() {
 	for user in level0 level1 level2 level3 level4 level5 \
 				level6 level7 level8 level9 bonus0 bonus1 \
-				bonus2
+				bonus2 bonus3
 	do
 		if [ ! -s "./$user/flag" ]; then
 			VM_USER="$user"
