@@ -11,12 +11,15 @@ Or create the VM manually and add a port forwarding rule under `Settings > Netwo
 
 After starting the VM you can log on using `ssh -p 4242 level0@127.0.0.1` and using the password `level0`. Then you're good to go.
 
-You can log in as a specific user (level[0-9] or bonus[0-3]) using the following command
+You can log in as a specific user (level[0-9], bonus[0-3]), or latest using the following command
 ```sh
-./tools/open_level.sh [user]
+./rainfall_toolkit.sh open <target user> [file path]
 ```
 
-If the flag has not been found, it will not be printed.
+This toolkit can also inject or extract a file using
+```sh
+./rainfall_toolkit.sh <inject|extract> <target user> [file path]
+```
 
  ## Introduction
  This is a project about binary exploitation, in particular **Buffer Overflow** attacks. 
