@@ -137,7 +137,7 @@ Let's see if we did escalated our privileges.
 
 Now we can get the password using
 ```sh
-cat /home/user/level2/level2/.pass
+cat /home/user/level2/.pass
 ```
 >53a4a712787f40ec66c3c26c1f4b164dcad5552b038bb0addd69bf5bf6fa8e77
 
