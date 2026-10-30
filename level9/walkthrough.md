@@ -24,7 +24,7 @@ Thus, we'll have to use a **shellcode injection** to open a new shell.
 The `main()` function creates two instances of `N`. The first with it's value set to *5* and the second to *6*.
 The the first argument is copied to the first instance of `N`.
 
-Let's see where our classes are allocated using using `ltrace ./level9 aaaaaaaa`.
+Let's see where our classes are allocated using `ltrace ./level9 aaaaaaaa`.
 **this** is at `0x804a008` and **this_00** is at `0x804a078`.
 
 If we set a breakpoint at `0x08048690` right before the **this_00** method call, and inspect the memory range of **this** we get this.
