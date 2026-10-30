@@ -2,37 +2,34 @@
 #include <string.h>
 #include <stdio.h>
 
-typedef void undefined4;
-
 /* Decompiled using Ghidra */
 
-
-void main(undefined4 param_1,int param_2)
+void main(int argc, char **argv)
 {
-  char *__dest;
-  undefined4 *puVar1;
-  
-  __dest = malloc(0x40);
-  puVar1 = malloc(4);
-  *puVar1 = m;
-  strcpy(__dest,*(char **)(param_2 + 4));
-  (*(code *)*puVar1)();
-  return;
+	void *func;
+	char *__dest;
+
+	__dest = malloc(0x40); // 64
+	func = malloc(4);
+	*func = m;
+	strcpy(__dest, argv[1]);
+	func();
+	return;
 }
 
-void m(void *param_1,int param_2,char *param_3,int param_4,int param_5)
+void m(void)
 {
-  puts("Nope");
-  return;
+	puts("Nope");
+	return;
 }
 
 void n(void)
 {
-  system("/bin/cat /home/user/level7/.pass");
-  return;
+	system("/bin/cat /home/user/level7/.pass");
+	return;
 }
 
 void frame_dummy(void)
 {
-  return;
+	return;
 }
