@@ -71,10 +71,10 @@ So, our `printf()` must contain 64 characters, the address of **m** and the mean
 
 We can just find the address of **m** using **Ghidra**. It's `0x0804988c` and becomes `\x8c\x98\x04\x08` in writable little endian.
 
-[Owasp's article on string attacks](https://owasp.org/www-community/attacks/Format_string_attack) tells us that `printf()` can print the stack preceding the call. Let's test this with an **EGG** (identifiable string in memory, in our case AAAA) then.
+[Owasp's article on string attacks](https://owasp.org/www-community/attacks/Format_string_attack) tells us that `printf()` can print the stack preceding the call. Let's test this with an **EGG** (identifiable string in memory, in our case aaaa) then.
 
 ```sh
-$ echo "AAAA %x %x %x %x" | ./level3
+$ echo "aaaa %x %x %x %x" | ./level3
 aaaa 200 b7fd1ac0 b7ff37d0 61616161
 ```
 Here `%x` points to the hex value at the corresponding stack address.
