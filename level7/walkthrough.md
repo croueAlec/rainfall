@@ -15,6 +15,8 @@ Functions found using `(gdb) info functions`
 
 `frame_dummy()` does nothing (color me surprised).
 
+The program takes two strings as arguments. The first argument is stored in **string** and the second one is stored at the address pointed to by **ptr**, which is the address of **string2**.
+
 we need to overwrite the address of puts with m
 ```sh
 (gdb) x m
@@ -68,7 +70,9 @@ fgets( <unfinished ...>
 
 We can see that by overflowing the first `malloc()` the destination address of **argv[2]** strcpy changes to `0x0804a000`.
 
-It can be confusing as to why it is written to this address. In short when we write our `20 * a` characters, the program reads it as `aaaaaaaaaaaaaaaaaaaa\0` with a *null ending character*. This is the only byte that is written on the next *4 bytes*. So `0x0804a038` becomes `0x0804a000`. If we were to add a trailing `A` to our input,  `aaaaaaaaaaaaaaaaaaaaA\0` would give this address `0x08004161` with the *null byte* being shifted by `A` (0x41 in hexadecimal), at which point, the program receives a *segfault*.
+It can be confusing as to why it is written to this address. In short when we write our `20 * a` characters, the program reads it as `aaaaaaaaaaaaaaaaaaaa\0` with a *null ending character*. This is the only byte that is written on the next *4 bytes*. So `0x0804a038` becomes `0x0804a000`. If we were to add a trailing `A` to our input,  `aaaaaaaaaaaaaaaaaaaaA\0` would give this address `0x08040041` with the *null byte* being shifted by `A` (0x41 in hexadecimal), at which point, the program receives a *segfault*.
+
+Our goal will be to overwrite **ptr** by overflowing **string1** so that it now contains the address of `puts()` on the **GOT**.
 
 Now we just have to change it to the address of `puts()` on the **GOT** which is `\x28\x99\x04\x08` in writable little endian. Then it will write **argv[2]** to this address, in our case the address of `m()` which in writable little endian is `\xf4\x84\x04\x08`.
 
