@@ -39,7 +39,7 @@ It works, now we need to do this outside GDB.
 
 We need a *buffer overflow* on the **buffer** to overwrite the value of **check** to `0x574f4c46`.
 `memcpy()` takes a `size_t` value as argument to indicate the number of bytes to copy.
-Let's use an underflow to copy a memory of **44 bytes** using a negative value.
+Let's use an underflow to copy a memory of **44 bytes** (the buffer's size + **check**'s **4 bytes**) using a negative value.
 
 ```python
 -2147483648 <= x <= 9
